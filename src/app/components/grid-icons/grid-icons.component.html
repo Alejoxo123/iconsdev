@@ -1,0 +1,72 @@
+<div class="absolute inset-0 -z-10 h-full w-full bg-white bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_24px]"></div>
+<div class="flex h-screen">
+  <!-- Barra lateral para categorías -->
+  <div class="w-1/5 bg-gradient-to-r from-gray-900 via-gray-800 to-black text-white p-4 space-y-4 overflow-y-auto shadow-lg mt-16">
+    <h2 class="text-xl font-semibold">Categorías</h2>
+    <div class="flex flex-col space-y-2">
+      <button *ngFor="let category of categories" (click)="onCategoryClick(category.name)"
+        [class.bg-blue-500]="selectedCategory === category.name"
+        [class.text-white]="selectedCategory === category.name"
+        class="px-4 py-2 rounded-lg font-semibold text-left text-sm border border-transparent hover:bg-blue-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all ease-in-out">
+        {{ category.name }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Contenido principal -->
+  <div class="flex flex-col flex-1 overflow-hidden mt-16">
+    <!-- Barra de búsqueda fija -->
+    <div class="bg-white shadow-md p-4 flex items-center justify-between w-full">
+      <div class="relative w-full text-[16px]">
+        <input type="text" [(ngModel)]="query" (input)="onSearch()" placeholder="Buscar iconos"
+          class="w-full border-b-2 border-gray-300 bg-white p-3 px-11 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all" />
+      </div>
+    </div>
+
+    <!-- Contenido principal con padding-top para evitar que el navbar se sobreponga -->
+    <div class="container mx-auto px-6 pt-6 xl:px-4 overflow-y-auto">
+      <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
+        <div *ngFor="let icon of filteredIcons()"
+          class="border-2 border-gradient-to-r from-purple-400 via-pink-500 to-red-500 rounded-lg shadow-md p-4 flex flex-col items-center relative hover:shadow-xl transition-all ease-in-out">
+          <img *ngIf="icon.raster_sizes[7]?.formats[0]?.preview_url"
+            [src]="icon.raster_sizes[7].formats[0]?.preview_url" alt="Icono"
+            class="w-16 h-16 object-contain mb-4 cursor-pointer hover:scale-110 transition-transform ease-in-out"
+            (click)="openModal(icon)" />
+          <p class="text-center text-sm text-stone-950 font-semibold">{{ icon.tags.join(', ') }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sin resultados -->
+    <div *ngIf="filteredIcons().length === 0" class="text-center mt-4 text-gray-500">
+      <p>No se encontraron iconos.</p>
+    </div>
+  </div>
+
+<!-- Modal de Descarga -->
+<div *ngIf="selectedIcon" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+  <div class="bg-white rounded-lg p-6 w-11/12 md:w-2/3 lg:w-1/2 shadow-xl flex">
+    <!-- Imagen del ícono (izquierda) -->
+    <div class="w-1/2 flex justify-center items-center">
+      <img [src]="selectedIcon.raster_sizes[7]?.formats[0]?.preview_url" alt="Ícono Seleccionado"
+        class="w-32 h-32 object-contain" />
+    </div>
+
+    <!-- Opciones de descarga (derecha) -->
+    <div class="w-1/2 pl-6">
+      <h2 class="text-xl font-semibold mb-6 text-gray-800">Descargar Ícono</h2>
+      <div class="space-y-2">
+        <button *ngFor="let size of selectedIcon.raster_sizes"
+          class="bg-gradient-to-r from-gray-900 via-gray-800 to-black text-white w-full py-1.5 rounded-md hover:bg-indigo-700 transition-all text-sm"
+          (click)="onDownload(selectedIcon.icon_id, size.size)">
+          Descargar {{ size.size }}px
+        </button>
+      </div>
+      <button class="mt-4 bg-gray-500 text-white w-full py-1.5 rounded-md hover:bg-gray-600 transition-all text-sm"
+        (click)="closeModal()">
+        Cerrar
+      </button>
+    </div>
+  </div>
+</div>
+</div>

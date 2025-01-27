@@ -23,7 +23,7 @@
       </div>
     </div>
 
-    <!-- Contenido principal con padding-top para evitar que el navbar se sobreponga -->
+    <!-- Contenido principal  -->
     <div class="container mx-auto px-6 pt-6 xl:px-4 overflow-y-auto">
       <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
         <div *ngFor="let icon of filteredIcons()"
@@ -46,13 +46,13 @@
 <!-- Modal de Descarga -->
 <div *ngIf="selectedIcon" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
   <div class="bg-white rounded-lg p-6 w-11/12 md:w-2/3 lg:w-1/2 shadow-xl flex">
-    <!-- Imagen del ícono (izquierda) -->
+    <!-- Imagen del ícono -->
     <div class="w-1/2 flex justify-center items-center">
       <img [src]="selectedIcon.raster_sizes[7]?.formats[0]?.preview_url" alt="Ícono Seleccionado"
         class="w-32 h-32 object-contain" />
     </div>
 
-    <!-- Opciones de descarga (derecha) -->
+    <!-- Opciones de descarga -->
     <div class="w-1/2 pl-6">
       <h2 class="text-xl font-semibold mb-6 text-gray-800">Descargar Ícono</h2>
       <div class="space-y-2">

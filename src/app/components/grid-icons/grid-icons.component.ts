@@ -12,15 +12,15 @@ import { debounceTime, switchMap } from 'rxjs';
   styleUrls: ['./grid-icons.component.css']
 })
 export class GridIconsComponent {
-  iconos: any[] = []; // Array para almacenar los iconos
-  query: string = ''; // Valor de la búsqueda
-  count: number = 100; // Número de iconos a mostrar
-  offset: number = 0; // Desplazamiento para la paginación
-  selectedIcon: any | null = null; // Icono seleccionado para mostrar opciones
+  iconos: any[] = []; 
+  query: string = ''; 
+  count: number = 100; 
+  offset: number = 0; 
+  selectedIcon: any | null = null; 
   availableTags: string[] = [];
   filter: string = '';
   favorites: any[] = [];
-  selectedTag: string = ''; // Tag seleccionado para filtrar
+  selectedTag: string = ''; 
   categories: { name: string; tags: string[] }[] = [
     { name: 'Redes Sociales y Comunicación', tags: ['houzz', 'instagram', 'facebook', 'twitter', 'whatsapp', 'linkedin', 'youtube', 'bird', 'imo'] },
     { name: 'Iconos y Logotipos', tags: ['logo', 'brand', 'dell', 'chrome', 'google', 'netflix', 'quantcast', 'archiveofourown'] },
@@ -41,24 +41,24 @@ export class GridIconsComponent {
     { name: 'Hardware y Tecnología', tags: ['hardware', 'printer'] },
     { name: 'Otros', tags: ['strong', 'meet', 'complete', 'local'] },
   ];
-  selectedCategory: string = ''; // Categoría seleccionada
+  selectedCategory: string = '';
   
 
   constructor(private apiIconService: ApiIconService) { }
 
   ngOnInit(): void {
-    this.loadIconos(); // Carga los iconos cuando el componente se inicializa
+    this.loadIconos(); 
   }
 
-  // Método para cargar iconos desde la API
+  
   loadIconos(): void {
     this.apiIconService.getIconos(this.query, 50, 0)
       .subscribe(
         (data) => {
-          console.log('Datos de los iconos:', data); // Revisa qué datos llegan aquí
+          console.log('Datos de los iconos:', data); 
           this.iconos = Array.isArray(data.icons) ? data.icons : [];
-          this.availableTags = this.getUniqueTags(); // Obtener los tags únicos
-          console.log('Tags disponibles:', this.availableTags); // Revisa si se generan correctamente
+          this.availableTags = this.getUniqueTags(); 
+          console.log('Tags disponibles:', this.availableTags); 
         },
         (error) => {
           console.error('Error al cargar los iconos', error);
@@ -70,7 +70,7 @@ export class GridIconsComponent {
   }
   
 
-  // Método para manejar la búsqueda
+  
   onSearch(): void {
     this.apiIconService.getIconos(this.query, this.count, this.offset)
       .pipe(debounceTime(300), switchMap(() => this.apiIconService.getIconos(this.query, this.count, this.offset)))
@@ -110,19 +110,19 @@ export class GridIconsComponent {
     this.selectedIcon = null;
   }
 
-  // Método para seleccionar un icono y mostrar sus opciones de tamaño
+  
   selectIcon(icon: any): void {
     this.selectedIcon = icon;
   }
 
-  // Método para descargar el icono en un tamaño específico
+  
   onDownload(iconId: string, size: number): void {
     this.apiIconService.downloadIcon(iconId, size).subscribe(
       (blob) => {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `icon-${size}.png`;  // Nombre del archivo con el tamaño
+        a.download = `icon-${size}.png`;  
         a.click();
         window.URL.revokeObjectURL(url);
       },
@@ -133,7 +133,7 @@ export class GridIconsComponent {
     );
   }
 
- // Filtrar iconos por categoría
+ 
  filteredIcons(): any[] {
   if (!this.selectedCategory) {
     return this.iconos;
@@ -142,7 +142,7 @@ export class GridIconsComponent {
   return this.iconos.filter(icon => icon.tags.some((tag: string) => selectedTags.includes(tag)));
 }
 
-// Manejar clic en una categoría
+
 onCategoryClick(category: string): void {
   this.selectedCategory = this.selectedCategory === category ? '' : category;
 }
